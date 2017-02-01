@@ -1,0 +1,5 @@
+FROM maven
+
+RUN mkdir -p /app
+
+WORKDIR /app

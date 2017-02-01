@@ -1,0 +1,10 @@
+version: '2'
+
+services:
+  hello-world:
+    build:
+      context: .
+      dockerfile: Dockerfile.build
+    command: mvn install
+    volumes:
+      - .:/app
