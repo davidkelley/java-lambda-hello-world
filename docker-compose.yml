@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.build
-    command: mvn install
+    command: mvn clean install
     volumes:
       - .:/app
+      - .m2:/root/.m2

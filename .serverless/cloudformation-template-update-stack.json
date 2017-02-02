@@ -30,8 +30,8 @@
             "-",
             [
               "hello-world",
-              "v0",
-              "eu-west-1",
+              "dev",
+              "us-east-1",
               "lambdaRole"
             ]
           ]
@@ -48,7 +48,7 @@
           "Fn::Join": [
             "-",
             [
-              "v0",
+              "dev",
               "hello-world",
               "lambda"
             ]
@@ -63,14 +63,14 @@
                 "logs:CreateLogGroup",
                 "logs:CreateLogStream"
               ],
-              "Resource": "arn:aws:logs:eu-west-1:*:*"
+              "Resource": "arn:aws:logs:us-east-1:*:*"
             },
             {
               "Effect": "Allow",
               "Action": [
                 "logs:PutLogEvents"
               ],
-              "Resource": "arn:aws:logs:eu-west-1:*:*"
+              "Resource": "arn:aws:logs:us-east-1:*:*"
             }
           ]
         },
@@ -88,9 +88,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/hello-world/v0/1485975797786-2017-02-01T19:03:17.786Z/hello-dev.jar"
+          "S3Key": "serverless/hello-world/dev/1486042228065-2017-02-02T13:30:28.065Z/hello-dev.jar"
         },
-        "FunctionName": "hello-world-v0-hello",
+        "FunctionName": "hello-world-dev-hello",
         "Handler": "com.serverless.Handler",
         "MemorySize": 1024,
         "Role": {
@@ -107,20 +107,20 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "HelloLambdaVersiont7p96SDCzLtsxZt96HXCZmdojKZGv6LTRMvqatgAauc": {
+    "HelloLambdaVersion3iKrkDbKFZhNsRcixXilJ3r3q1m7E8zQA1aDcXR6Uw": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "HelloLambdaFunction"
         },
-        "CodeSha256": "t7p96SDCzLtsxZt96HXCZmdojKZGv6LTRMvqatgAauc="
+        "CodeSha256": "3/iKrkDbKFZhNsRcixXilJ3r3q1m7E8zQA1aDcXR6Uw="
       }
     },
     "ApiGatewayRestApi": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
-        "Name": "v0-hello-world"
+        "Name": "dev-hello-world"
       }
     },
     "ApiGatewayResourceHello": {
@@ -176,13 +176,13 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1485975797799": {
+    "ApiGatewayDeployment1486042228079": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
         },
-        "StageName": "v0"
+        "StageName": "dev"
       },
       "DependsOn": [
         "ApiGatewayMethodHelloGet"
@@ -240,7 +240,7 @@
     "HelloLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "HelloLambdaVersiont7p96SDCzLtsxZt96HXCZmdojKZGv6LTRMvqatgAauc"
+        "Ref": "HelloLambdaVersion3iKrkDbKFZhNsRcixXilJ3r3q1m7E8zQA1aDcXR6Uw"
       }
     },
     "ServiceEndpoint": {
@@ -253,7 +253,7 @@
             {
               "Ref": "ApiGatewayRestApi"
             },
-            ".execute-api.eu-west-1.amazonaws.com/v0"
+            ".execute-api.us-east-1.amazonaws.com/dev"
           ]
         ]
       }
