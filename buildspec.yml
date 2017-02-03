@@ -1,0 +1,12 @@
+version: 0.1
+
+phases:
+  pre_build:
+    commands:
+      - 'curl -L "https://github.com/docker/compose/releases/download/1.10.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose'
+  build:
+    commands:
+      - docker-compose pull
+      - docker-compose build
+      - docker-compose run src mvn install
+      - docker-compose run src sls deploy -s $SLS_STAGE -r $AWS_DEFAULT_REGION

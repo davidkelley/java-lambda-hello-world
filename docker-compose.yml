@@ -1,7 +1,7 @@
 version: '2'
 
 services:
-  hello-world:
+  src:
     build:
       context: .
       dockerfile: Dockerfile.build
