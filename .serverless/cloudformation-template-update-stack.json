@@ -30,7 +30,7 @@
             "-",
             [
               "hello-world",
-              "dev",
+              "v0",
               "us-east-1",
               "lambdaRole"
             ]
@@ -48,7 +48,7 @@
           "Fn::Join": [
             "-",
             [
-              "dev",
+              "v0",
               "hello-world",
               "lambda"
             ]
@@ -88,9 +88,9 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/hello-world/dev/1486042228065-2017-02-02T13:30:28.065Z/hello-dev.jar"
+          "S3Key": "serverless/hello-world/v0/1486134393990-2017-02-03T15:06:33.990Z/hello-dev.jar"
         },
-        "FunctionName": "hello-world-dev-hello",
+        "FunctionName": "hello-world-v0-hello",
         "Handler": "com.serverless.Handler",
         "MemorySize": 1024,
         "Role": {
@@ -107,20 +107,93 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "HelloLambdaVersion3iKrkDbKFZhNsRcixXilJ3r3q1m7E8zQA1aDcXR6Uw": {
+    "HelloLambdaVersionEYkpptDMs98a0iOKyxHsikjLR4BqfvzvqKfovG8vw": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "HelloLambdaFunction"
         },
-        "CodeSha256": "3/iKrkDbKFZhNsRcixXilJ3r3q1m7E8zQA1aDcXR6Uw="
+        "CodeSha256": "EYkp+ptDMs98a0iOKyxHsikjLR4BqfvzvqKfov/G8vw="
+      }
+    },
+    "FoobarLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/hello-world/v0/1486134393990-2017-02-03T15:06:33.990Z/hello-dev.jar"
+        },
+        "FunctionName": "hello-world-v0-foobar",
+        "Handler": "com.foobar.Handler",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        },
+        "Runtime": "java8",
+        "Timeout": 6
+      },
+      "DependsOn": [
+        "IamPolicyLambdaExecution",
+        "IamRoleLambdaExecution"
+      ]
+    },
+    "FoobarLambdaVersionEYkpptDMs98a0iOKyxHsikjLR4BqfvzvqKfovG8vw": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "FoobarLambdaFunction"
+        },
+        "CodeSha256": "EYkp+ptDMs98a0iOKyxHsikjLR4BqfvzvqKfov/G8vw="
+      }
+    },
+    "FoobarEventsRuleSchedule1": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "ScheduleExpression": "rate(30 minutes)",
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::GetAtt": [
+                "FoobarLambdaFunction",
+                "Arn"
+              ]
+            },
+            "Id": "foobarSchedule"
+          }
+        ]
+      }
+    },
+    "FoobarLambdaPermissionEventsRuleSchedule1": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "FoobarLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "FoobarEventsRuleSchedule1",
+            "Arn"
+          ]
+        }
       }
     },
     "ApiGatewayRestApi": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
-        "Name": "dev-hello-world"
+        "Name": "v0-hello-world"
       }
     },
     "ApiGatewayResourceHello": {
@@ -176,13 +249,13 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1486042228079": {
+    "ApiGatewayDeployment1486134394018": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
         },
-        "StageName": "dev"
+        "StageName": "v0"
       },
       "DependsOn": [
         "ApiGatewayMethodHelloGet"
@@ -240,7 +313,22 @@
     "HelloLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "HelloLambdaVersion3iKrkDbKFZhNsRcixXilJ3r3q1m7E8zQA1aDcXR6Uw"
+        "Ref": "HelloLambdaVersionEYkpptDMs98a0iOKyxHsikjLR4BqfvzvqKfovG8vw"
+      }
+    },
+    "FoobarLambdaFunctionArn": {
+      "Description": "Lambda function info",
+      "Value": {
+        "Fn::GetAtt": [
+          "FoobarLambdaFunction",
+          "Arn"
+        ]
+      }
+    },
+    "FoobarLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "FoobarLambdaVersionEYkpptDMs98a0iOKyxHsikjLR4BqfvzvqKfovG8vw"
       }
     },
     "ServiceEndpoint": {
@@ -253,7 +341,7 @@
             {
               "Ref": "ApiGatewayRestApi"
             },
-            ".execute-api.us-east-1.amazonaws.com/dev"
+            ".execute-api.us-east-1.amazonaws.com/v0"
           ]
         ]
       }
